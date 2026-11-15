@@ -67,13 +67,22 @@
 
 ## 실행 방법 (Windows, PowerShell)
 
-준비물: 파이썬, Anthropic API 키, VTube Studio와 Live2D 모델, 인터넷.
+준비물: 파이썬 3.13.14(개발·확인한 버전이며 다른 버전은 확인하지 못했습니다), Anthropic API 키, 인터넷. 아바타를 쓰려면 VTube Studio와 Live2D 모델도 필요합니다.
+
+### 빠른 시작 A. 아바타 없이 대화만 해 보기
 
 ```
 python -m pip install -r requirements.txt
-python -m pip install SpeechRecognition pyaudio      # /mic을 쓸 때만
 $env:ANTHROPIC_API_KEY="본인_키"
+python vtuber_chat_test.py
 ```
+
+- 코드상 VTube Studio가 없어도 진행되도록 되어 있고, 시작할 때 `[VTS] 연결 실패` 메시지가 나옵니다. **아바타 없는 환경에서의 실행은 아직 확인하지 못했습니다.**
+- 대사는 글자와 음성으로 나오고, 표정·모션·립싱크는 일어나지 않습니다.
+
+### 빠른 시작 B. VTube Studio와 함께
+
+먼저 위 A의 설치와 API 키 입력을 합니다. 마이크 입력(`/mic`)을 쓰려면 `python -m pip install SpeechRecognition pyaudio`도 실행합니다.
 
 1. VTube Studio에서 모델을 불러오고 설정의 `Allow Plugin API access`를 켭니다.
 2. 처음 한 번, 모델의 표정·모션을 감정에 연결합니다. 허용 팝업이 뜨면 Allow를 누릅니다.
@@ -85,11 +94,16 @@ $env:ANTHROPIC_API_KEY="본인_키"
    python vtuber_chat_test.py
    ```
 
+### 입력 명령
+
 입력창에서 Enter는 대본 진행, 글자 입력은 가짜 시청자 채팅, `/mic`은 마이크 입력, `/emo <감정>`은 표정 시험, `/vts`는 모델의 표정·핫키 목록, `/fix <지시>`는 말투 교정, `/skip`은 대본 건너뛰기, `exit`는 종료입니다.
 
-**주의**
+### 막히기 쉬운 점
+
+- `python`을 찾을 수 없다는 메시지가 나오면, 파이썬을 설치할 때 PATH에 추가하는 옵션을 켰는지 확인하세요.
+- API 키는 환경변수로만 넣고 파일에 적지 마세요. `$env:` 설정은 그 PowerShell 창에서만 유효해서, 창을 닫으면 다시 입력해야 합니다.
+- 소리가 나지 않으면 출력 장치와 볼륨을 확인하세요.
 - `motion_extra.json`의 `hotkey:T1`~`T9`는 개발에 쓴 모델의 핫키 이름입니다. 다른 모델이라면 이 파일을 지우거나 본인 모델의 핫키 이름으로 고치세요.
-- VTube Studio 없이도 대사는 나오고, 표정만 바뀌지 않습니다.
 
 ## 폴더 구성
 
@@ -110,6 +124,14 @@ $env:ANTHROPIC_API_KEY="본인_키"
 - 음성 인식(`/mic`)은 구글 웹 음성 인식을 쓰며, 인터넷이 필요하고 무료 사용 한도와 약관은 확인하지 못했습니다.
 - Windows에서 개발하고 확인했습니다. 다른 컴퓨터나 운영체제에서의 설치와 실행은 확인하지 못했습니다.
 
+## 포함하지 않은 파일
+
+API 키, VTube Studio 인증 토큰(`vts_token.txt`), 방송 기억(`memory.json`), 사용량 기록(`usage_log.csv`), 아바타 모델 파일은 저장소에 넣지 않았습니다.
+
 ## 아바타 크레딧
 
-아바타는 VTube-Studio의 Live2D의 기본 제공 모델 **Hiyori**를 임시로 사용했습니다. 모델 파일은 이 저장소에 포함되어 있지 않습니다.
+아바타는 Live2D의 기본 제공 모델 **Hiyori**를 임시로 사용했습니다. 모델 파일은 이 저장소에 포함되어 있지 않습니다.
+
+## 라이선스
+
+이 저장소에서 직접 작성한 코드는 [MIT 라이선스](LICENSE)입니다. Hiyori 모델, Anthropic API, 사용한 라이브러리(edge-tts, playsound, websockets, miniaudio, SpeechRecognition 등)는 각자의 약관과 라이선스를 따르며 이 라이선스에 포함되지 않습니다.
